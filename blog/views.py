@@ -4,19 +4,30 @@ from django.utils import timezone
 
 from .models import Post
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 from .forms import PostForm
 
 from django.shortcuts import render, get_object_or_404
 
 from django.shortcuts import redirect
+
 # Create your views here.
 
 
 def post_list(request):
 
+    # posts = Post.objects.all()
     posts = Post.objects.filter(
         published_date__lte=timezone.now()).order_by('published_date')
-
+    page = request.GET.get('page', 1)
+    paginator = Paginator(posts, 2)
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
     return render(request, 'blog/post_list.html', {'posts': posts})
 
 
@@ -58,3 +69,8 @@ def post_edit(request, pk):
     else:
         form = PostForm(instance=post)
     return render(request, 'blog/post_edit.html', {'form': form})
+
+
+def about_us(request):
+
+    return render(request, 'blog/about.html')

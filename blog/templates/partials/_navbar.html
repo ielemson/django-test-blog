@@ -1,4 +1,8 @@
-{% url 'post_list' as home_url %} {% url 'post_new' as post_url %}
+{% url 'post_list' as home_url %}
+<b></b>
+{% url 'post_new' as post_url %}
+<b></b>
+{% url 'about_us' as about_url %}
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -22,8 +26,11 @@
         <li class="nav-item {% if request.path == home_url %} active {%endif%}">
           <a href="/">Home</a>
         </li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Contact</a></li>
+        <li
+          class="nav-item {% if request.path == about_url %} active {%endif%}"
+        >
+          <a href="#">About</a>
+        </li>
         <li class="nav-item {% if request.path == post_url %} active {%endif%}">
           <a href="{% url 'post_new' %}">Create Post</a>
         </li>
